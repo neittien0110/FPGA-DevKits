@@ -9,8 +9,9 @@
 - [OS Image mặc định cho lõi ARM](#os-image-m%E1%BA%B7c-%C4%91%E1%BB%8Bnh-cho-l%C3%B5i-arm)
 - [Sử dụng và phát triển các Ứng dụng trên ARM core](#s%E1%BB%AD-d%E1%BB%A5ng-v%C3%A0-ph%C3%A1t-tri%E1%BB%83n-c%C3%A1c-%E1%BB%A8ng-d%E1%BB%A5ng-tr%C3%AAn-arm-core)
 - [Sử dụng và phát triển các bộ Accelerator trên FPGA core](#s%E1%BB%AD-d%E1%BB%A5ng-v%C3%A0-ph%C3%A1t-tri%E1%BB%83n-c%C3%A1c-b%E1%BB%99-accelerator-tr%C3%AAn-fpga-core)
+- [Board file để tích hợp board PNYQ-Z2 vào Vivado](#board-file-%C4%91%E1%BB%83-t%C3%ADch-h%E1%BB%A3p-board-pnyq-z2-v%C3%A0o-vivado)
     - [Tạo dự án trên Vivado](#t%E1%BA%A1o-d%E1%BB%B1-%C3%A1n-tr%C3%AAn-vivado)
-    - [TUL PYNQ-Z2 / Bắt đầu xây dựng mạng SNN trong Vivado](#tul-pynq-z2--b%E1%BA%AFt-%C4%91%E1%BA%A7u-x%C3%A2y-d%E1%BB%B1ng-m%E1%BA%A1ng-snn-trong-vivado)
+    - [Tạo Block Diagram mô tả cấu trúc board PYNQ-Z2](#t%E1%BA%A1o-block-diagram-m%C3%B4-t%E1%BA%A3-c%E1%BA%A5u-tr%C3%BAc-board-pynq-z2)
 
 <!-- /TOC -->
 
@@ -29,7 +30,8 @@
 - [PYNQ Z2 Schematic, offline](./TUL_PYNQ-Z2-docs//TUL_PYNQ_Schematic_R12.pdf)
 - [PYNQ Ze User guide, offline](./TUL_PYNQ-Z2-docs//pynqz2_user_manual_v1_0.pdf)
 - [PYNQ Ze User guide, online](https://dpoauwgwqsy2x.cloudfront.net/Download/pynqz2_user_manual_v1_0.pdf)
-- [Mã nguồn](https://pynq.readthedocs.io/en/latest/pynq_package.html)
+- [Tài liệu chi tiết đặc tả và các thư viện, bitstream](https://pynq.readthedocs.io/en/latest/pynq_package.html)
+- [Github](https://github.com/xilinx/PYNQ/)
 
 ## Mối quan hệ trong SoC và quá trình phát triển
 
@@ -115,57 +117,72 @@ Từ khóa: Ubuntu OS, python, Web
 
 ## Sử dụng và phát triển các bộ Accelerator trên FPGA core
 
+## Board file để tích hợp board PNYQ-Z2 vào Vivado
+
+- [online](https://github.com/xupsh/pynq-supported-board-file), 
+- [offline](./TUL_PYNQ-Z2-BoardFile/A.0/)
+
 ### Tạo dự án trên Vivado
 
 - Mở **Vivado**
 - Chọn **Create Project**. Bấm **New**, và sau đó **Next**.\
   ![alt text](./TUL_PYNQ-Z2-images/newproject.1.png)
 - Đặt tên dự án và thư mục dự án.\
-  ![alt text](./TUL_PYNQ-Z2-images/newproject.2.png)  
+  ![Project Name](./TUL_PYNQ-Z2-images/newproject.2.png)  
+- Ở cửa sổ **Project Type**, chọn **RTL Project**.\
+  ![Project Type](./TUL_PYNQ-Z2-images/newproject.3.png)
 - Đừng chọn tab "Parts", hãy chọn tab **Boards**.\
-  ![alt text](./TUL_PYNQ-Z2-images/newproject.3.png)\
-  Chọn board **pynq-z2**. Bấm **Next**.
+  Chọn board **pynq-z2**. Bấm **Next**.\
+  <span style="color:red"> Lưu ý: Nếu board **pynq-z2** không hiện ra như trong ảnh, tức là board này chưa đặc tả trong Vivado. Xem hướng dẫn [Bổ sung thêm các Dev-Kit board mới](./Vivado.md#bổ-sung-thêm-các-dev-kit-board-mới), và tải về [board file PYNQ-Z2 ở đây](#board-file-để-tích-hợp-board-pnyq-z2-vào-vivado) </span>\
+  ![Select Board](./TUL_PYNQ-Z2-images/newproject.4.png)\
+  ![PYNQ-Z2 board trong Vivado](./TUL_PYNQ-Z2-images/newproject.5.png)
+- Chuyển sang trang cuối **New Project Summary**, bấm **Finish**.
+- Xem tiếp [Tạo Block Diagram mô tả cấu trúc board PYNQ-Z2](#tạo-block-diagram-mô-tả-cấu-trúc-board-pynq-z2)
 
-### TUL PYNQ-Z2 / Bắt đầu xây dựng mạng SNN trong Vivado
+### Tạo Block Diagram mô tả cấu trúc board PYNQ-Z2
 
-*Lưu ý rằng: phần core **ARM** vẫn sử dụng **Ubutu OS image** mặc định đã có, và phải có. Các thao tác bên dưới chỉ tác động lên phàn Zynq XC7000 thôi.*
+1. Mở dự án quan tâm
+2. Ở thanh **FLOW NAVIGATOR**, trong collapse **IP Integrator**, chọn **Create Block Design**.\
+    ![Create Block Design](./TUL_PYNQ-Z2-images/CreateBlockDesign.png)\
+    Ví dụ: đặt tên là _mainsystem_.
+3. Ở cửa sổ **Block Design** ở giữa màn hình, mở **Design Sources**, rồi click vào _mainsystem_. Cửa sổ **Diagram** sẽ mở ra.
+![Open Diagram](./TUL_PYNQ-Z2-images/BlankDiagram.png)
+4. Click chuột phải vào vùng trống của Diagram (hoặc nhấn phím tắt Ctrl + I).\
+   Gõ **Zynq** vào ô tìm kiếm.\
+   Chọn **ZYNQ7 Processing System**.\
+   ![ZYNQ7 Processing System](./TUL_PYNQ-Z2-images/ZYNQ7ProcessingSystemBlock.png)
+5. Trong cửa sổ **DIagram**, sẽ thấy một dòng thông báo màu xanh hiện lên ở trên cùng: _"Designer Assistance available. Run Block Automation"_.\
+    Hãy nhấn vào dòng chữ **Run Block Automation**.\
+    ![ZYNQ7 Processing System và Run Block Automation](./TUL_PYNQ-Z2-images/ZYNQ7ProcessingSystemBlock.2.png)\
+    Nhấn **OK**.\
+    Kết quả: Khối Zynq sẽ tự động xuất hiện các chân kết nối như **DDR (RAM)** và **FIXED_IO**. Đây là cấu hình "thần thánh" giúp Ubuntu trên PYNQ nhận diện được phần cứng mà không bị treo máy.
+6. Thêm "Tay chân" (GPIO để điều khiển LED)
+    - Nhấn Ctrl + I một lần nữa, tìm và thêm IP tên là **AXI GPIO**.
+    - Double-click (nhấp đúp) vào khối **AXI GPIO** vừa hiện ra. ([Xem giải thích cách hoạt động ở đây](./Vivado.md#về-khối-softip-axi-gpio))
+    - Trong tab **IP Configuration**, ở mục **GPIO**, chọn **All Outputs**.
+    - Ở mục **GPIO Width**, nhập số **4** (tương ứng với 4 đèn LED trên PYNQ-Z2).
+        ![Setting AXI4 GPIO for 4 leds](./TUL_PYNQ-Z2-images/SettingAXI4GPIO.png)
+7. Kết nối vạn vật (Run Connection Automation)
+    - Sau khi có GPIO, click vào dòng thông báo màu xanh: **Run Connection Automation**.
+    - Tích chọn tất cả các ô (bao gồm cả **S_AXI** và **GPIO**).
+    - Nhấn **OK**.\
+    ![Setting AXI4 GPIO for 4 leds](./TUL_PYNQ-Z2-images/SettingAXI4GPIO.2.png)
+    - Trường hợp đã xóa trên giao diện Block Design, chỉ cần select 1 đối tượng Block thiếu nào đó, và bấm **Ctrl+T** để chương trình tự nối các cổng thiếu ra pin ngoài.
+8. Tạo **bitstream**
+    - Chuột phải vào file **.bd**, click **Create HDL Wrapper**.\
+      ![Create HDL Wrapper](./TUL_PYNQ-Z2-images/CreateHDLWrapper.png)
+    - Bấm **Generate Bitstream**.
+9. Kết quả, lúc này 2 file biên dịch thành phẩm là:
+   - **.bit**: Nằm trong thư mục
 
-Khi thiết kế SNN trong Vivado, việc chọn đúng Board File sẽ giúp tính năng **Designer Assistance** sử dụng được.
+        ```plain
+            <Tên dự án>/<Tên dự án>.runs/impl_1/mainsystem_wrapper.bit
+        ```
 
-- Khi kéo thả khối xử lý **Zynq** vào sơ đồ, **Vivado** sẽ tự động hỏi: "Bạn có muốn tôi tự cấu hình RAM và Clock cho PYNQ Z2 không?".
-- Bấm **Run Block Automation** thì toàn bộ cấu hình phức tạp sẽ được thiết lập chuẩn ngay.
+   - **.hwh**: Nằm trong thư mục
 
-```mermaid
-graph LR
-    subgraph "PS (Processing System - Lõi ARM)"
-        Zynq["ZYNQ7 Processing System"]
-    end
+        ```plain
+            <Tên dự án>/<Tên dự án>.gen\sources_1/bd/mainsystem/hw_handoff/mainsystem.hwh
+        ```
 
-    subgraph "Hệ thống điều phối (Infrastructure)"
-        Reset["Processor System Reset"]
-        Interconnect["AXI Interconnect / SmartConnect"]
-    end
-
-    subgraph "PL (Programmable Logic - FPGA)"
-        GPIO["AXI GPIO (Điều khiển LED/Nút bấm)"]
-        SNN["SNN Custom IP (Nhân xử lý của bạn)"]
-    end
-
-    %% Kết nối Xung nhịp và Reset
-    Zynq -- "FCLK_CLK0 (100MHz)" --> Reset
-    Zynq -- "FCLK_CLK0" --> Interconnect
-    Zynq -- "FCLK_CLK0" --> GPIO
-    Zynq -- "FCLK_CLK0" --> SNN
-    
-    Reset -- "Peripheral Reset" --> Interconnect
-    Reset -- "Peripheral Reset" --> GPIO
-
-    %% Kết nối dữ liệu AXI
-    Zynq -- "M_AXI_GP0 (Master)" --> Interconnect
-    Interconnect -- "M00_AXI" --> GPIO
-    Interconnect -- "M01_AXI" --> SNN
-
-    style Zynq fill:#f96,stroke:#333,stroke-width:2px
-    style SNN fill:#6cf,stroke:#333,stroke-width:2px
-    style GPIO fill:#dfd,stroke:#333
-```
+> Vivado sẽ tự động vẽ thêm 2 khối: **Processor System Reset** và **AXI SmartConnect** (hoặc Interconnect), đồng thời nối dây xung nhịp (Clock) và dữ liệu (AXI) một cách hoàn chỉnh.
