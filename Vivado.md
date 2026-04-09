@@ -20,6 +20,7 @@
     - [Giả lập bằng file testbench](#gi%E1%BA%A3-l%E1%BA%ADp-b%E1%BA%B1ng-file-testbench)
     - [Giả lập bằng can thiệp trực tiếp vào waveform](#gi%E1%BA%A3-l%E1%BA%ADp-b%E1%BA%B1ng-can-thi%E1%BB%87p-tr%E1%BB%B1c-ti%E1%BA%BFp-v%C3%A0o-waveform)
 - [IO Planner - Gán chân Pin của SofIP với chân Pin vật lý](#io-planner---g%C3%A1n-ch%C3%A2n-pin-c%E1%BB%A7a-sofip-v%E1%BB%9Bi-ch%C3%A2n-pin-v%E1%BA%ADt-l%C3%BD)
+- [Nạp thiết kế vĩnh viên vào QSPI Flash](#n%E1%BA%A1p-thi%E1%BA%BFt-k%E1%BA%BF-v%C4%A9nh-vi%C3%AAn-v%C3%A0o-qspi-flash)
 
 <!-- /TOC -->
 
@@ -251,3 +252,40 @@ Có 2 cách thực hiện:
    > Sau khi chọn, các chân trên hình ảnh con chip ở giữa màn hình sáng lên khi gán đúng.
 ![I/O Standard and Assign Pins](./Vivado-images/AssignPins.png)
 7. Lưu file **.xdc**.
+
+## Nạp thiết kế vĩnh viên vào QSPI Flash
+
+Được dùng khi bản thiết kế được áp dụng ngay khi cấp nguồn mà không cần thông qua hệ điều hành (Linux/Python).
+
+- Bước 1: Tạo file **.bin** trong **Vivado** (mặc định Vivado chỉ tạo file **.bit**)
+  1. Vào Settings -> Bitstream.
+  2. Tích chọn ô -bin_file.
+  3. Nhấn OK và chạy lại Generate Bitstream.
+  ![Sinh file binary để nạp FPGA trực tiếp](./Vivado-images/GenBinaryFile.png)
+  4. Sau khi xong, file **.bin** sẽ nằm cùng thư mục với file **.bit** (thường là trong .../<ProjectName>.runs/impl_1/).
+
+- Bước 2: Thiết lập Jumper trên Dev kit, để board hiểu rằng nó phải đọc dữ liệu từ Flash khi khởi động thay vì thẻ nhớ SD:
+  - Tìm Jumper có chữ **BOOT** (gần đầu cắm nguồn/thẻ nhớ).
+  - Chuyển Jumper từ vị trí **SD** sang vị trí **QSPI**.
+
+- Bước 3: Nạp file **.bin** vào Flash bằng **Vivado**
+  - Mở **Hardware Manager** trong Vivado và kết nối với board (**Open Target**).
+  - Chuột phải vào chip FPGA (ví dụ: xc7z020_1) và chọn **Add Configuration Memory Device**.
+  - Trong bảng danh sách hiện ra, cần chọn đúng loại chip Flash trên PYNQ-Z2.
+    - Hãy tìm: spansion (hoặc Cypress).
+    - Model cụ thể thường là: s25fl128s-3.3v-qspi-x4-single.
+  - Vivado sẽ hỏi: _có muốn nạp file ngay bây giờ không?_. Chọn **Yes**.
+  - Trong cửa sổ **Program Configuration Memory Device**:
+    - **Configuration file**: Trỏ đến file **.bin**.
+    - **PRM file**: (để trống).
+    - Tích chọn: **Erase, Blank Check, Program, Verify.**
+    - Nhấn OK. Quá trình này sẽ mất khoảng 1-2 phút vì nó phải xóa Flash và ghi dữ liệu mới.
+
+- Bước 4: Kiểm tra thành quả
+  - Vivado báo "Program Operation Successful"
+  - Nhấn nút PROG (hoặc tắt nguồn bật lại) trên board.
+  - Xong
+
+> Lưu ý cực kỳ quan trọng đối với PYNQ hoặc các kit có MCU core:
+> - Khi đổi BOOT jumper thì hệ thống thì board sẽ không boot vào Linux (PYNQ) nữa, không AXI4. Nó chỉ chạy duy nhất logic FPGA nên cũng không có Linux hay ARM core nữa.
+> - Chỉnh BOOT jumber về SDCard là lại bình thường.

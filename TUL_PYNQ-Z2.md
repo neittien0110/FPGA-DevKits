@@ -12,6 +12,8 @@
 - [Board file để tích hợp board PNYQ-Z2 vào Vivado](#board-file-%C4%91%E1%BB%83-t%C3%ADch-h%E1%BB%A3p-board-pnyq-z2-v%C3%A0o-vivado)
     - [Tạo dự án trên Vivado](#t%E1%BA%A1o-d%E1%BB%B1-%C3%A1n-tr%C3%AAn-vivado)
     - [Tạo Block Diagram mô tả cấu trúc board PYNQ-Z2](#t%E1%BA%A1o-block-diagram-m%C3%B4-t%E1%BA%A3-c%E1%BA%A5u-tr%C3%BAc-board-pynq-z2)
+    - [Chạy chương trình](#ch%E1%BA%A1y-ch%C6%B0%C6%A1ng-tr%C3%ACnh)
+- [Examples](#examples)
 
 <!-- /TOC -->
 
@@ -43,7 +45,7 @@ graph TD
     %% Sử dụng hình đám mây cho Mạng
     Net(((☁️ Mạng nội bộ/Internet)))
     
-    SD["💾 Thẻ nhớ MicroSD (Lưu file .bit/.hwh)"]
+    SD["💾 Thẻ nhớ MicroSD (Lưu file .bit và.hwh)"]
     CPU["🧠 Lõi ARM (Ubuntu/Python)"]
     FPGA["⚡ Mạch logic SNN (FPGA)"]
 
@@ -168,6 +170,7 @@ Từ khóa: Ubuntu OS, python, Web
     - Nhấn **OK**.\
     ![Setting AXI4 GPIO for 4 leds](./TUL_PYNQ-Z2-images/SettingAXI4GPIO.2.png)
     - Trường hợp đã xóa trên giao diện Block Design, chỉ cần select 1 đối tượng Block thiếu nào đó, và bấm **Ctrl+T** để chương trình tự nối các cổng thiếu ra pin ngoài.
+    > Vivado sẽ tự động vẽ thêm 2 khối: **Processor System Reset** và **AXI SmartConnect** (hoặc Interconnect), đồng thời nối dây xung nhịp (Clock) và dữ liệu (AXI) một cách hoàn chỉnh.
 8. Tạo **bitstream**
     - Chuột phải vào file **.bd**, click **Create HDL Wrapper**.\
       ![Create HDL Wrapper](./TUL_PYNQ-Z2-images/CreateHDLWrapper.png)
@@ -185,4 +188,23 @@ Từ khóa: Ubuntu OS, python, Web
             <Tên dự án>/<Tên dự án>.gen\sources_1/bd/mainsystem/hw_handoff/mainsystem.hwh
         ```
 
-> Vivado sẽ tự động vẽ thêm 2 khối: **Processor System Reset** và **AXI SmartConnect** (hoặc Interconnect), đồng thời nối dây xung nhịp (Clock) và dữ liệu (AXI) một cách hoàn chỉnh.
+10. Chạy chương trình [CollectBitStream.py](./CollectBitStream.py) ([Xem hướng dẫn sử dụng ở đây](./Vivado.md#công-cụ-collectbitstreampy)) để thu gom file .bit và .hwh và đẩy lên board TUL PYNQ-Z2 thông qua địa chỉ IP mặc định **192.168.2.99**.
+
+### Chạy chương trình
+
+- Chạy trực tiếp python trên shell
+
+```shell
+ source /etc/profile.d/pynq_venv.sh
+ sudo -E python3 ./LedOn.py 12
+```
+
+- Chạy qua Jupiter Notebook
+
+- Chạy quay file shell script đã có sẵn các môi trường trên
+
+    ```shell
+    ./runme.sh
+    ```
+
+## Examples

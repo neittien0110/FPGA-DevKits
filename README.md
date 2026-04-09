@@ -21,6 +21,7 @@ Dev Kit | Price| Homepage
 - Chiu được 128 nhân RV32
 - Vua của Thị giác máy tính
 - Xilinx cung cấp các "Vision Apps" chạy sẵn (Smart Camera, AI Box). Nếu bạn làm mạng neuron nhận diện vật thể, khuôn mặt, đây là lựa chọn số 1.
+- [Mua sắm](https://mlab.vn/3759721-xilinx-kria-kv260-vision-ai-starter-kit-sk-kv260-g.html)
 
 ## Kria KR260 Robotics Starter Kit
 
@@ -29,3 +30,4 @@ Dev Kit | Price| Homepage
   SNN Library: Sử dụng các framework như SNNilink hoặc BindsNET để huấn luyện mô hình trên máy tính.
   HLS Implementation: Viết mô hình SNN bằng C++ (Vitis HLS) để nạp vào FPGA của KR260.
   Python Interface:
+- [Mua sắm](https://www.proe.vn/kria-kr260-robotics-starter-kit)  
