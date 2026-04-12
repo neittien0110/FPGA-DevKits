@@ -21,6 +21,7 @@
     - [Giả lập bằng can thiệp trực tiếp vào waveform](#gi%E1%BA%A3-l%E1%BA%ADp-b%E1%BA%B1ng-can-thi%E1%BB%87p-tr%E1%BB%B1c-ti%E1%BA%BFp-v%C3%A0o-waveform)
 - [IO Planner - Gán chân Pin của SofIP với chân Pin vật lý](#io-planner---g%C3%A1n-ch%C3%A2n-pin-c%E1%BB%A7a-sofip-v%E1%BB%9Bi-ch%C3%A2n-pin-v%E1%BA%ADt-l%C3%BD)
 - [Nạp thiết kế vĩnh viên vào QSPI Flash](#n%E1%BA%A1p-thi%E1%BA%BFt-k%E1%BA%BF-v%C4%A9nh-vi%C3%AAn-v%C3%A0o-qspi-flash)
+- [Thanh chức năng FLOW NAVIGATOR](#thanh-ch%E1%BB%A9c-n%C4%83ng-flow-navigator)
 
 <!-- /TOC -->
 
@@ -36,9 +37,9 @@
 1. Đăng kí tài khoản với **AMD**, hãng đã thôn tính **Xilinx**.\
    <https://www.amd.com/en/registration/create-account.html>/\
    _Lưu ý rằng: nếu khai bao địa chỉ là Việt Nam thì có thế không được quyền tải về. Hãy lấy thông tin địa chỉ đâu đó ở Singapo. Không cần fake IP_
-2. Tải về file bộ cài chung. File **Unified** này không phải bộ câì offline, mà sẽ là bảng chọn để sau đó tải về các gói đầy đủ từ trên internet. 
+2. Tải về file bộ cài chung. File **Unified** này không phải bộ câì offline, mà sẽ là bảng chọn để sau đó tải về các gói đầy đủ từ trên internet.
    <https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vivado/vivado-buy.html>
-3. Chạy file *Unified** nói trên, đến bước **Select Edition to Install**, sẽ thấy các lựa chọn:\
+3. Chạy file _Unified_* nói trên, đến bước **Select Edition to Install**, sẽ thấy các lựa chọn:\
    ![Select Edition to Install](./Vivado-images/Select%20Edition%20to%20Install.png)
    - **Vitis**: sẽ bao gồm cả **Vivado** và **Vitis HLS**. **Vitis HLS** sẽ giúp thiết kế mức cao với C++ nên dễ triển khai mạng **SNN**.
    - **Vivado**: Chỉ thiết kế phần cứng thuần túy ở mức **RTL** và **Structural**, với các ngôn ngữ **Verilog**, **SystemVerilog**, hoặc **VHDL**. Rất khó khăn khi muốn chạy Linux/PYNQ mượt mà.
@@ -287,5 +288,66 @@ Có 2 cách thực hiện:
   - Xong
 
 > Lưu ý cực kỳ quan trọng đối với PYNQ hoặc các kit có MCU core:
+>
 > - Khi đổi BOOT jumper thì hệ thống thì board sẽ không boot vào Linux (PYNQ) nữa, không AXI4. Nó chỉ chạy duy nhất logic FPGA nên cũng không có Linux hay ARM core nữa.
 > - Chỉnh BOOT jumber về SDCard là lại bình thường.
+
+## Thanh chức năng FLOW NAVIGATOR
+
+Index | Chức năng (Sidebar) | Ý nghĩa chức năng | Link tham khảo |
+:--- | :--- | :--- | :--- |
+**1** | **Project Manager** | **Quản lý tổng thể dự án và tài nguyên.** | [UG892](https://docs.amd.com/r/en-US/892-vivado-design-analysis-closure-tutorial/Project-Manager) |
+1.1 | Settings | Cấu hình thông số dự án, chọn dòng chip, thư mục và thiết lập tool. | |
+1.2 | Add Sources | Thêm/Tạo file thiết kế (HDL), ràng buộc (XDC) hoặc file mô phỏng. | |
+1.3 | Language Templates | Kho chứa các mẫu code chuẩn (Verilog, VHDL, XDC) để copy nhanh. | |
+1.4 | IP Catalog | Thư viện các khối IP lõi có sẵn (Memory, DSP, Clocking...). | |
+**2** | **IP Integrator** | **Thiết kế hệ thống dựa trên sơ đồ khối (Block Design).** | [UG994](https://docs.amd.com/r/en-US/994-vivado-ip-subsystem-design-tutorial/IP-Integrator) |
+2.1 | Create Block Design | Tạo môi trường đồ họa mới để kết nối các IP phức tạp. | |
+2.2 | Open Block Design | Mở sơ đồ khối hiện có để chỉnh sửa. | |
+2.3 | Generate Block Design | Biên dịch sơ đồ khối sang mã nguồn HDL cho các bước sau. | |
+**3** | **Simulation** | **Kiểm tra tính đúng đắn của logic bằng mô phỏng.** | [UG900](https://docs.amd.com/r/en-US/900-vivado-logic-simulation) |
+3.1 | Run Simulation | Chạy phần mềm mô phỏng để quan sát dạng sóng (Waveform). | |
+**4** | **RTL Analysis** | **Phân tích logic ở mức Register-Transfer Level.** | [UG901](https://docs.amd.com/r/en-US/901-vivado-synthesis) |
+4.1 | Run Linter | Kiểm tra lỗi cú pháp và các quy tắc viết code (Coding Styles). | |
+4.2 | Open Elaborated Design | Dựng sơ đồ mạch sơ bộ từ mã nguồn RTL. | |
+4.2.1 | - Report Methodology | Báo cáo các vi phạm về phương pháp luận thiết kế. | |
+4.2.2 | - Report DRC | Kiểm tra quy tắc thiết kế (Design Rule Check) mức vật lý. | |
+4.2.3 | - Report Noise | Phân tích nhiễu tín hiệu dự kiến. | |
+4.2.4 | - Schematic | Xem sơ đồ nguyên lý tổ hợp từ code. | |
+**5** | **Synthesis** | **Tổng hợp thiết kế thành Netlist cổng logic.** | [UG901](https://docs.amd.com/r/en-US/901-vivado-synthesis) |
+5.1 | Run Synthesis | Thực hiện tối ưu hóa và chuyển đổi code thành cổng logic. | |
+5.2 | Open Synthesized Design | Mở thiết kế sau khi tổng hợp để phân tích sâu. | |
+5.2.1 | - Constraints Wizard | Công cụ hướng dẫn tạo các ràng buộc thời gian/chân chip. | |
+5.2.2 | - Edit Timing Constraints | Chỉnh sửa thủ công các file ràng buộc thời gian (XDC). | |
+5.2.3 | - Set Up Debug | Cấu hình các lõi ILA để theo dõi tín hiệu thực tế trên chip. | |
+5.2.4 | - Open Dataflow Design | Xem sơ đồ luồng dữ liệu xử lý trong mạch. | |
+5.2.5 | - Report Timing Summary | Báo cáo tổng kết về các ràng buộc thời gian (Slack). | |
+5.2.6 | - Report Clock Networks | Phân tích cấu trúc cây xung nhịp (Clock tree). | |
+5.2.7 | - Report Clock Interaction | Kiểm tra sự tương tác giữa các vùng clock khác nhau. | |
+5.2.8 | - Report Methodology | Kiểm tra lại phương pháp luận sau tổng hợp. | |
+5.2.9 | - Report DRC | Kiểm tra lỗi thiết kế sau khi đã ánh xạ vào thư viện cổng. | |
+5.2.10 | - Report Noise | Đánh giá lại nhiễu sau tổng hợp. | |
+5.2.11 | - Report Utilization | Báo cáo mức độ sử dụng tài nguyên (LUT, FF, BRAM, DSP). |Tài nguyên|
+5.2.12 | - Report Power | Ước tính mức tiêu thụ điện năng dựa trên netlist. | |
+5.2.13 | - Schematic | Xem sơ đồ mạch chi tiết sau tối ưu hóa. | |
+**6** | **Implementation** | **Xếp linh kiện và đi dây thực tế trên chip.** | [UG904](https://docs.amd.com/r/en-US/904-vivado-implementation) |
+6.1 | Run Implementation | Chạy thuật toán đặt vị trí và đi dây (Place & Route). | |
+6.2 | Open Implemented Design | Xem thiết kế vật lý cuối cùng trên bản đồ chip. | |
+6.2.1 | - Constraints Wizard | Rà soát ràng buộc dựa trên vị trí vật lý thực tế. | |
+6.2.2 | - Open Dataflow Design | Phân tích luồng dữ liệu trên sơ đồ thực tế. | |
+6.2.3 | - Edit Timing Constraints | Chỉnh sửa ràng buộc dựa trên kết quả đi dây thực tế. | |
+6.2.4 | - Report Timing Summary | Báo cáo thời gian cuối cùng (quyết định mạch có chạy được không). |Max Clockrate|
+6.2.5 | - Report Clock Networks | Xem mạng lưới clock sau khi đã đi dây vật lý. | |
+6.2.6 | - Report Clock Interaction | Phân tích kỹ các lỗi crossing clock domain vật lý. | |
+6.2.7 | - Report Methodology | Báo cáo phương pháp luận lần cuối. | |
+6.2.8 | - Report DRC | Kiểm tra lỗi vật lý cuối cùng trước khi sinh bitstream. | |
+6.2.9 | - Report Noise | Phân tích nhiễu điện từ trên các đường dây thực tế. | |
+6.2.10 | - Report Utilization | Thống kê chính xác số lượng linh kiện thực tế bị chiếm dụng. |Tài nguyên|
+6.2.11 | - Report Power | Báo cáo công suất tiêu thụ chính xác nhất. | |
+6.2.12 | - Schematic | Xem sơ đồ kết nối vật lý cuối cùng. | |
+**7** | **Program and Debug** | **Nạp file và gỡ lỗi trên phần cứng.** | [UG908](https://docs.amd.com/r/en-US/908-vivado-programming-debugging) |
+7.1 | Generate Bitstream | Tạo file nhị phân (.bit) để nạp vào FPGA. | |
+7.2 | Open Hardware Manager | Kết nối với phần cứng qua cáp JTAG. | |
+7.2.1 | - Open Target | Dò tìm và kết nối với kit FPGA đang cắm vào máy. | |
+7.2.2 | - Program Device | Nạp file .bit vào bộ nhớ SRAM của FPGA. | |
+7.2.3 | - Add Config Memory | Nạp file cấu hình vào bộ nhớ Flash để giữ mạch khi mất điện. | |
