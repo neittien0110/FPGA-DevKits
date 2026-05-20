@@ -1,21 +1,8 @@
-# PYNQ-Z2 Setup Guide
+# PYNQ-Z2 Setup Guide
 
 **PYNQ** là viết tắt của **P**ython productivity for **Zynq**
 
-<!-- TOC -->
-
-- [Tài liệu](#t%C3%A0i-li%E1%BB%87u)
-- [Mối quan hệ trong SoC và quá trình phát triển](#m%E1%BB%91i-quan-h%E1%BB%87-trong-soc-v%C3%A0-qu%C3%A1-tr%C3%ACnh-ph%C3%A1t-tri%E1%BB%83n)
-- [OS Image mặc định cho lõi ARM](#os-image-m%E1%BA%B7c-%C4%91%E1%BB%8Bnh-cho-l%C3%B5i-arm)
-- [Sử dụng và phát triển các Ứng dụng trên ARM core](#s%E1%BB%AD-d%E1%BB%A5ng-v%C3%A0-ph%C3%A1t-tri%E1%BB%83n-c%C3%A1c-%E1%BB%A8ng-d%E1%BB%A5ng-tr%C3%AAn-arm-core)
-- [Sử dụng và phát triển các bộ Accelerator trên FPGA core](#s%E1%BB%AD-d%E1%BB%A5ng-v%C3%A0-ph%C3%A1t-tri%E1%BB%83n-c%C3%A1c-b%E1%BB%99-accelerator-tr%C3%AAn-fpga-core)
-- [Board file để tích hợp board PNYQ-Z2 vào Vivado](#board-file-%C4%91%E1%BB%83-t%C3%ADch-h%E1%BB%A3p-board-pnyq-z2-v%C3%A0o-vivado)
-    - [Tạo dự án trên Vivado](#t%E1%BA%A1o-d%E1%BB%B1-%C3%A1n-tr%C3%AAn-vivado)
-    - [Tạo Block Diagram mô tả cấu trúc board PYNQ-Z2](#t%E1%BA%A1o-block-diagram-m%C3%B4-t%E1%BA%A3-c%E1%BA%A5u-tr%C3%BAc-board-pynq-z2)
-    - [Chạy chương trình](#ch%E1%BA%A1y-ch%C6%B0%C6%A1ng-tr%C3%ACnh)
-- [Examples](#examples)
-
-<!-- /TOC -->
+[[TOC]]
 
 ## Tài liệu
 
@@ -34,6 +21,36 @@
 - [PYNQ Ze User guide, online](https://dpoauwgwqsy2x.cloudfront.net/Download/pynqz2_user_manual_v1_0.pdf)
 - [Tài liệu chi tiết đặc tả và các thư viện, bitstream](https://pynq.readthedocs.io/en/latest/pynq_package.html)
 - [Github](https://github.com/xilinx/PYNQ/)
+
+## Các ngoại vi built-in
+
+![Toàn bộ kit](./TUL_PYNQ-Z2-images/pynq_z2.jpg)
+
+Board Parts | FPGA Pin
+--: | :--:
+SW0, với 2 giá trị 3v3 và 0v | M20
+SW1, với 2 giá trị 3v3 và 0v | M19
+BTN0, tích cực mức cao | D19
+BTN1, tích cực mức cao | D20
+BTN2, tích cực mức cao | L20
+BTN3, tích cực mức cao | L19
+LED0, tích cực mức cao | R14
+LED1, tích cực mức cao | P14
+LED2, tích cực mức cao | N16
+LED3, tích cực mức cao | M14
+rgb_leds[0], tích cực mức cao,  R G B | N15 G17 L15
+rgb_leds[1], tích cực mức cao, R G B | M15 L14 G14
+
+Đồng thời đặt mức điện áp I/O std của tất cả các chân pin là LVCMOS33
+
+### Nút PROG
+
+- xóa cấu hình FPGA hiện thời, rồi nạp lại cấu hình FPGA mặc định của kit.
+- phần lõi **ARM core và OS** vẫn tiếp tục hoạt động.
+
+### Nút SRST
+
+- khởi động lại toàn bộ kit
 
 ## Mối quan hệ trong SoC và quá trình phát triển
 
@@ -206,5 +223,9 @@ Từ khóa: Ubuntu OS, python, Web
     ```shell
     ./runme.sh
     ```
+
+**Lưu ý tình huống đặc biệt**
+
+- Nếu **ngắt chương trình python** giữa chừng, thì phần FPGA đã được cấu hình vẫn giữ nguyên chức năng. \
 
 ## Examples
