@@ -93,7 +93,7 @@ $$V_{mem}(t) = V_{mem}(t-1) + \sum_{i=1}^{n} (Spike_i \times Weight_i) - Leak$$
 
 #### Source Code
 
-  <code style="color : purple">[GitHub: SNN_SingleLIF](https://github.com/neittien0110/SNN_SingleLIF)</code>
+  <code style="color : purple">[GitHub: SNN_SingleLIF ![GitHub Logo](https://github.githubassets.com/images/icons/emoji/octocat.png)](https://github.com/neittien0110/SNN_SingleLIF)</code>
 
 ### Dự án 2: Mã hóa thông tin (Spike Encoding)
 
