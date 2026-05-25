@@ -91,8 +91,11 @@ graph TD
 
 ## OS Image mặc định cho lõi ARM
 
-1. Tải về image của hệ điều hành ubuntu cho lõi ARM [PYNQ Images](https://www.pynq.io/boards.html)
-2. Burn image lên SD Card
+1. Tải về image của hệ điều hành ubuntu cho lõi ARM [PYNQ Images](https://www.pynq.io/boards.html), file ***pynq_version.img**.
+2. Burn image lên SD Card bằng **BalenaEtcher** hoặc **Rufus**.\
+![Burn image by Rufus](TUL_PYNQ-Z2-images/BurnImageByRufus.png)
+![Burn image by Balena](TUL_PYNQ-Z2-images/BurnImageByBalena.png)
+
 3. Kết nối trực tiếp kit với địa chỉ IP tĩnh mặc định. [Xem ở đây](https://pynq.readthedocs.io/en/latest/getting_started/pynq_z2_setup.html#connect-to-a-computer)
 
    ```mermaid

@@ -1,29 +1,6 @@
 # AMD Vivado Design Suite
 
-<!-- TOC -->
 
-- [Các công cụ trong gói để làm việc với TUL PNYQ-Z2, hoặc Kria KV260](#c%C3%A1c-c%C3%B4ng-c%E1%BB%A5-trong-g%C3%B3i-%C4%91%E1%BB%83-l%C3%A0m-vi%E1%BB%87c-v%E1%BB%9Bi-tul-pnyq-z2-ho%E1%BA%B7c-kria-kv260)
-- [Download](#download)
-- [Thay đổi giao diện](#thay-%C4%91%E1%BB%95i-giao-di%E1%BB%87n)
-- [Bổ sung thêm các Dev-Kit board mới](#b%E1%BB%95-sung-th%C3%AAm-c%C3%A1c-dev-kit-board-m%E1%BB%9Bi)
-- [Mối quan hệ giữa file .bit và .hwh](#m%E1%BB%91i-quan-h%E1%BB%87-gi%E1%BB%AFa-file-bit-v%C3%A0-hwh)
-- [Công cụ CollectBitStream.py](#c%C3%B4ng-c%E1%BB%A5-collectbitstreampy)
-- [Cách thiết kế dạng Block Diagram](#c%C3%A1ch-thi%E1%BA%BFt-k%E1%BA%BF-d%E1%BA%A1ng-block-diagram)
-    - [Khối Slide Bộ tách Bus](#kh%E1%BB%91i-slide-b%E1%BB%99-t%C3%A1ch-bus)
-    - [Khối Concat Bộ gộp Bus](#kh%E1%BB%91i-concat-b%E1%BB%99-g%E1%BB%99p-bus)
-    - [Khối AND, OR, XOR, NOT](#kh%E1%BB%91i-and-or-xor-not)
-    - [Khối AXI GPIO Điều khiển cụm GPIO](#kh%E1%BB%91i-axi-gpio-%C4%90i%E1%BB%81u-khi%E1%BB%83n-c%E1%BB%A5m-gpio)
-- [Về khối SoftIP AXI GPIO](#v%E1%BB%81-kh%E1%BB%91i-softip-axi-gpio)
-    - [Các thanh ghi và địa chỉ](#c%C3%A1c-thanh-ghi-v%C3%A0-%C4%91%E1%BB%8Ba-ch%E1%BB%89)
-    - [Cách xác định Base Address của khối AXI GPIO](#c%C3%A1ch-x%C3%A1c-%C4%91%E1%BB%8Bnh-base-address-c%E1%BB%A7a-kh%E1%BB%91i-axi-gpio)
-- [Kiểm thử và mô phỏng](#ki%E1%BB%83m-th%E1%BB%AD-v%C3%A0-m%C3%B4-ph%E1%BB%8Fng)
-    - [Giả lập bằng file testbench](#gi%E1%BA%A3-l%E1%BA%ADp-b%E1%BA%B1ng-file-testbench)
-    - [Giả lập bằng can thiệp trực tiếp vào waveform](#gi%E1%BA%A3-l%E1%BA%ADp-b%E1%BA%B1ng-can-thi%E1%BB%87p-tr%E1%BB%B1c-ti%E1%BA%BFp-v%C3%A0o-waveform)
-- [IO Planner - Gán chân Pin của SofIP với chân Pin vật lý](#io-planner---g%C3%A1n-ch%C3%A2n-pin-c%E1%BB%A7a-sofip-v%E1%BB%9Bi-ch%C3%A2n-pin-v%E1%BA%ADt-l%C3%BD)
-- [Nạp thiết kế vĩnh viên vào QSPI Flash](#n%E1%BA%A1p-thi%E1%BA%BFt-k%E1%BA%BF-v%C4%A9nh-vi%C3%AAn-v%C3%A0o-qspi-flash)
-- [Thanh chức năng FLOW NAVIGATOR](#thanh-ch%E1%BB%A9c-n%C4%83ng-flow-navigator)
-
-<!-- /TOC -->
 
 ## Các công cụ trong gói để làm việc với TUL PNYQ-Z2, hoặc Kria KV260
 
@@ -116,6 +93,29 @@ Còn **Hardware Handoff .hwh** là từ điền địa chỉ, là driver để p
    ```
 
 ## Cách thiết kế dạng Block Diagram
+
+### Biên dịch Block Diagram
+
+- Sau khi thiết kế Block Diagram lần đàu tiên, bắt buộc phải chạy chức năng **Create HDL Wrapper**
+- Mỗi khi sửa Block Diagram, bắt buộc phải chạy lại **Generate Output Products**. 
+![Generate Output Products](./Vivado-images/Generate_Output_Products.png)
+
+Sự khác nhau cốt lõi giữa hai lệnh:
+
+Tính chất | Generate Output Products | Create HDL Wrapper
+-- | -- | --
+Bản chất | Dịch sơ đồ khối vào bên trong (Tạo ra code cho từng khối IP riêng lẻ, dây nối nội bộ). | Tạo vỏ bọc ra bên ngoài (Tạo file Top-level đại diện cho cả sơ đồ khối với bộ dịch).
+Tần suất làm | MỖI LẦN bạn thay đổi, thêm bớt khối, hoặc sửa dây nối trong Block Diagram. | Thường chỉ cần làm MỘT LẦN DUY NHẤT khi vừa tạo xong Block Diagram.
+
+Cũng giống như Generate Output Products, Create HDL Wrapper (Tạo file bọc) là một bước bắt buộc phải làm ít nhất một lần khi bạn dùng Block Diagram.
+
+Để hiểu tại sao có bước này, hãy đứng ở góc nhìn của bộ dịch Vivado (Synthesis Engine):
+
+Vivado luôn luôn cần một file code làm "Sếp tổng" (gọi là Top-level Module) cho toàn bộ dự án. Khi Vivado bắt đầu dịch mạch, nó sẽ mò vào file Top-level này trước, xem bên trong file này gọi những module con nào, rồi mới đi dịch các module con đó.
+
+Tuy nhiên, file Block Diagram (.bd) thực chất là một cấu trúc sơ đồ phức tạp. Bộ dịch Synthesis không thể chọn trực tiếp một file sơ đồ đồ họa .bd làm Top-level được. Nó cần một file code Verilog hoặc VHDL tiêu chuẩn để làm "vỏ bọc" đại diện cho cái sơ đồ đó.
+
+Đó chính là lý do vì sao phải **Create HDL Wrapper** —hành động này sinh ra một file .v (hoặc .vhd) bọc quanh sơ đồ khối, đóng vai trò làm người trung gian đứng ra "nói chuyện" với bộ dịch Synthesis của Vivado.
 
 ### Khối Slide (Bộ tách Bus)
 
