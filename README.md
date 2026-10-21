@@ -58,6 +58,9 @@
 
 Helloword với một khối **FPGA chỉ nối dây đồng với đèn led đơn**, và sử dụng **python** chạy trên **ARM core** để triệu gọi khối FPGA đó qua **AXI4**
 
+[Xem dự án](https://github.com/neittien0110/LedOn)
+
+
 ### LedSwitch
 
 Hai khối FPGA:
